@@ -3,7 +3,7 @@
 javac -cp "./metadata-extractor-2.9.1.jar;./xmpcore-5.1.2.jar" DescribeIt.java
 @IF NOT %ERRORLEVEL%==0 (pause 
 goto end )
-java DescribeIt 
+java -cp "metadata-extractor-2.9.1.jar;xmpcore-5.1.2.jar;." DescribeIt 
 @echo off
 IF NOT %ERRORLEVEL%==0 pause
 echo.
