@@ -1,6 +1,6 @@
 # Insert IPTC descriptions into VicuñaUploader session file
 
-This is a proof of concept class that shows how one can manipulate a session file saved in [VicuñaUploader](http://yarl.github.io/vicuna/).
+This is a proof of concept class that shows how one can manipulate a session file saved in [VicuñaUploader](http://yarl.github.io/vicuna/). In this case one field of [IPTC](https://en.wikipedia.org/wiki/IPTC_Information_Interchange_Model) data that might have been insertedby using a tool like [GeoSetter](http://www.geosetter.de/) gets retrieved from the files and inserted in the description field of the session file.
 
 "Installation"
 --------------
