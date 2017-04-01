@@ -17,16 +17,19 @@ public class DescribeIt
 {
 	public static void main (String[] kzp)
 	{
+		String FILE_INITIAL = "session.xml";
+		String FILE_INITIAL_WITH_ROOT = "tempIn.xml";
+		String FILE_RESULT_WITH_ROOT ="tempOut.xml";
+		String FILE_RESULT ="output.xml";
 		try
 		{
 			//add root tag to non well-formed xml file
-			String filename = "tempIn.xml";
-			DumpFile(filename,  "<root>" + ReadWholeFile("session.xml") +"</root>");
+			DumpFile(FILE_INITIAL_WITH_ROOT,  "<root>" + ReadWholeFile(FILE_INITIAL) +"</root>");
 			
 			//parse document
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(filename);
+			Document doc = builder.parse(FILE_INITIAL_WITH_ROOT);
 			XPathFactory xPathfactory = XPathFactory.newInstance();
 			XPath xpath = xPathfactory.newXPath();
 
@@ -42,12 +45,14 @@ public class DescribeIt
 					Element firstElement = (Element)mapNode;                              
 					NodeList pathList = firstElement.getElementsByTagName("path");
 					NodeList descList = firstElement.getElementsByTagName("desc");
-					System.out.println(pathList.item(0).getTextContent());
-					Element pathElement = (Element) pathList.item(0);
 					
+					Element pathElement = (Element) pathList.item(0);
+					System.out.println(pathList.item(0).getTextContent());
 					//get image metadata
 					File jpegFile = new File(pathList.item(0).getTextContent());
 					Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
+					
+					Boolean found = false;
 					for (Directory metaDirectory : metadata.getDirectories()) 
 					{
 						for (Tag tag : metaDirectory.getTags()) 
@@ -55,22 +60,25 @@ public class DescribeIt
 							if(tag.toString().startsWith("[IPTC] Caption"))
 							{
 								//set tag content as description in XML
-								descList.item(0).setTextContent(tag.getDescription());
+								String descr = tag.getDescription();
+								descList.item(0).setTextContent(descr);
+								System.out.println("=> " + descr);
+								found = true;
 								break;
 							}
 						}
+						if(found) break;
 					}
 				}
 			}
 			//Save as temp file
-			String fileOut = "tempOut.xml";
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			Result output = new StreamResult(new File(fileOut));
+			Result output = new StreamResult(new File(FILE_RESULT_WITH_ROOT));
 			Source input = new DOMSource(doc);
 			transformer.transform(input, output);
 			
 			//remove root tags
-			DumpFile("output.xml", ReadWholeFile(fileOut).replace("<root>","").replace("</root>", ""));
+			DumpFile(FILE_RESULT, ReadWholeFile(FILE_RESULT_WITH_ROOT).replace("<root>","").replace("</root>", ""));
 		}
 		catch(Exception e)
 		{
