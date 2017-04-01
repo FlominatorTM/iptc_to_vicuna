@@ -32,7 +32,7 @@ Compiling
 1. Clone this project
 2. Install some Java development kit
 3. Put the bin folder of it into your path environment variable or add it to the commands java and javac in build_and_run.bat
-4. Get and unzip the metadata-extractor file mentioned in seciton "Installation"
+4. Get and unzip the metadata-extractor file mentioned in seciton "Installation" (you should now have to additional jar files in the folder)
 5. Run build_and_run.bat
 
 Components used
